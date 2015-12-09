@@ -278,7 +278,6 @@ public class NVProgressHUD: UIView {
     // MARK: - show & hide
     
     public func show(animated: Bool) {
-        // TODO: Make sure run in mainThread
         
         NSObject.cancelPreviousPerformRequestsWithTarget(self)
         

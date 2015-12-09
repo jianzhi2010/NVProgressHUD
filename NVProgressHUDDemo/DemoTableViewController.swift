@@ -73,12 +73,8 @@ class DemoTableViewController: UITableViewController {
         hud = NVProgressHUD(frame: self.navigationController!.view.frame)
         self.navigationController!.view.addSubview(hud)
         
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0)) { () -> Void in
-            self.hud.delegate = self
-            self.hud.labelText = "Loading"
-        }
-//        hud.delegate = self
-//        hud.labelText = "Loading"
+        hud.delegate = self
+        hud.labelText = "Loading"
         
         hud.show(true)
         hud.hide(true, afterDelay: 2.0)
