@@ -1,6 +1,10 @@
 # NVProgressHUD
 A simple progress HUD using [NVActivityIndicatorView](https://github.com/ninjaprox/NVActivityIndicatorView) 
 
+![image](https://github.com/jianzhi2010/NVProgressHUD/blob/master/NVProgressHUDDemo/image/demo01.png)
+![image](https://github.com/jianzhi2010/NVProgressHUD/blob/master/NVProgressHUDDemo/image/demo02.png)
+![image](https://github.com/jianzhi2010/NVProgressHUD/blob/master/NVProgressHUDDemo/image/demo03.png)
+
 # Installation
 Just drag the NVProgressHUD.swift file into your project, and install [NVActivityIndicatorView](https://github.com/ninjaprox/NVActivityIndicatorView) 
 
