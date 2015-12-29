@@ -53,6 +53,9 @@ class DemoTableViewController: UITableViewController {
         case 8:
             showUsingExtension()
             break
+        case 9:
+            showIndicatorOnly()
+            break
         default:
             break
         }
@@ -133,7 +136,6 @@ class DemoTableViewController: UITableViewController {
         
         hud.delegate = self
         hud.color = UIColor(red: 0.23, green: 0.50, blue: 0.82, alpha: 0.90)
-        
         hud.show(true)
         hud.hide(true, afterDelay: 2.0)
     }
@@ -155,6 +157,16 @@ class DemoTableViewController: UITableViewController {
         dispatch_after(delayTime, dispatch_get_main_queue()) { () -> Void in
             self.navigationController?.view.hideHUD(true)
         }
+    }
+    
+    func showIndicatorOnly() {
+        hud = NVProgressHUD(frame: self.navigationController!.view.frame, color: UIColor.blackColor())
+        self.navigationController!.view.addSubview(hud)
+        
+        hud.delegate = self
+        hud.showIndicatorOnly = true
+        hud.show(true)
+        hud.hide(true, afterDelay: 2.0)
     }
 }
 

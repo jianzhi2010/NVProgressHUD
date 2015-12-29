@@ -91,13 +91,53 @@ public class NVProgressHUD: UIView {
 
     public weak var delegate: NVProgressHUDDelegate?
     
+    /**
+     * Only show indicator view.
+     * Defaults to false.
+     */
+    public var showIndicatorOnly = false
+    
+    /**
+     * The type of indicator view.
+     */
     public var animationType = NVProgressHUDAnimation.Fade
+    
+    /**
+     * The amount of space between the HUD edge and the HUD elements.
+     * Defaults to 20.0
+     */
     public var margin = 20.0
-    public var cornerRadius = 8.0
+    
+    /**
+     * The corner radius for the HUD
+     * Defaults to 10.0
+     */
+    public var cornerRadius = 10.0
+    
+    /**
+     * The color of the HUD window.
+     * Defaults to black.
+     */
     public var color: UIColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.8)
+    
+    /**
+     * Cover the HUD background view with a radial gradient.
+     * Defaults to false.
+     */
     public var dimBackground: Bool = false
+    
+    /**
+     * Force the HUD dimensions to be equal if possible.
+     * Defaults to false
+     */
     public var square: Bool = false
+    
+    /**
+     * Removes the HUD from its parent view when hidden.
+     * Defaults to false.
+     */
     public var removeFromSuperViewOnHide: Bool = false
+    
     public static let SubjectType = "NVProgressHUD"
     
     private var indicatorView: NVActivityIndicatorView
@@ -118,12 +158,13 @@ public class NVProgressHUD: UIView {
     Create a progress HUD with specified frame and type
     
     - parameter frame: view's frame
-    - parameter type: animation type, value of NVActivityIndicatorType enum.
+    - parameter type: indicator type, value of NVActivityIndicatorType enum.
+    - parameter color:    indicator color.
     
     - returns: The progress HUD
     */
-    init(frame: CGRect, type: NVActivityIndicatorType = NVActivityIndicatorType.BallSpinFadeLoader) {
-        indicatorView = NVActivityIndicatorView(frame: frame, type: type)
+    init(frame: CGRect, type: NVActivityIndicatorType = NVActivityIndicatorType.BallSpinFadeLoader, color: UIColor = UIColor.whiteColor()) {
+        indicatorView = NVActivityIndicatorView(frame: frame, type: type, color: color)
         label = UILabel(frame: frame)
         detailsLabel = UILabel(frame: frame)
         self.indicatorType = type
@@ -240,6 +281,9 @@ public class NVProgressHUD: UIView {
     
     override public func drawRect(rect: CGRect) {
         // Drawing code
+        if showIndicatorOnly {
+            return
+        }
         
         let context = UIGraphicsGetCurrentContext()
         
@@ -287,6 +331,7 @@ public class NVProgressHUD: UIView {
             } else if animationType == NVProgressHUDAnimation.ZoomOut {
                 self.transform = CGAffineTransformMakeScale(1.5, 1.5)
             }
+            
             UIView .animateWithDuration(0.3, animations: { () -> Void in
                 self.alpha = 1.0
                 self.transform = CGAffineTransformIdentity
@@ -363,6 +408,13 @@ public class NVProgressHUD: UIView {
 
 extension UIView {
     
+    /**
+     Creates a new HUD, adds it to provided view and shows it.
+     
+     - parameter animated: animated If set to YES the HUD will appear using the current animationType. If set to NO the HUD will not use
+     
+     - returns: A reference to the created HUD.
+     */
     func showHUD(animated: Bool) -> NVProgressHUD {
         let hud = NVProgressHUD(frame: self.frame)
         self.addSubview(hud)
@@ -371,6 +423,21 @@ extension UIView {
         return hud
     }
     
+    func showHUD(animated: Bool, type: NVActivityIndicatorType, color: UIColor) -> NVProgressHUD {
+        let hud = NVProgressHUD(frame: self.frame, type: type, color: color)
+        self.addSubview(hud)
+        hud.removeFromSuperViewOnHide = true
+        hud.show(animated)
+        return hud
+    }
+    
+    /**
+     Finds the top-most HUD subview and hides it.
+     
+     - parameter animated: animated If set to YES the HUD will disappear using the current animationType. If set to NO the HUD will not use
+     
+     - returns: YES if a HUD was found and removed, NO otherwise.
+     */
     func hideHUD(animated: Bool) -> Bool {
         for view in self.subviews.reverse() {
             let aMirror = Mirror(reflecting: view)
@@ -380,5 +447,23 @@ extension UIView {
             }
         }
         return false
+    }
+    
+    /**
+     Creates a new Indicator, adds it to provided view and shows it.
+     
+     - parameter animated: animated If set to YES the HUD will disappear using the current animationType. If set to NO the HUD will not use
+     - parameter type:     indicator type, value of NVActivityIndicatorType enum.
+     - parameter color:    indicator color.
+     
+     - returns: A reference to the created HUD.
+     */
+    func showHUDIndicator(animated: Bool, type: NVActivityIndicatorType = NVActivityIndicatorType.BallSpinFadeLoader, color: UIColor = UIColor.whiteColor()) -> NVProgressHUD {
+        let hud = NVProgressHUD(frame: self.frame, type: type, color: color)
+        self.addSubview(hud)
+        hud.showIndicatorOnly = true
+        hud.removeFromSuperViewOnHide = true
+        hud.show(animated)
+        return hud
     }
 }
